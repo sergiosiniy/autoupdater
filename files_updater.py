@@ -1,8 +1,10 @@
-import glob, os, shutil, log_to_file
+import glob, os, shutil, log_to_file, datetime
 from os import path
 
+now=datetime.datetime.now()
 success='success_log'
 error='error_log'
+
 cwd=os.getcwd()
 
 setings_file=open('setings.upd','r')
@@ -52,14 +54,14 @@ def update():
         try:
             shutil.copy(dirpath_from_update+'\\'+file, \
                         dirpath_to_update,follow_symlinks=True)
-            log_to_file.write_log(success,file+'\tis copied from:\t'+ \
+            log_to_file.write_log(success,now.strftime("%Y-%m-%d %H:%M:%S ")+file+'\tis copied from:\t'+ \
                        dirpath_from_update+'\tto:\t'+dirpath_to_update)
-            print(file+'\tis copied from:\t'+dirpath_from_update+ \
+            print(now.strftime("%Y-%m-%d %H:%M:%S ")+file+'\tis copied from:\t'+dirpath_from_update+ \
                   '\tto:\t'+dirpath_to_update)
             
         except IOError:
-            log_to_file.write_log(error,file+'\t FAILED!\t FILE IS BUSY!')
-            print(file+'\t FAILED!\t FILE IS BUSY!')
+            log_to_file.write_log(error,now.strftime("%Y-%m-%d %H:%M:%S ")+file+'\t FAILED!\t FILE IS BUSY!')
+            print(now.strftime("%Y-%m-%d %H:%M:%S ")+file+'\t FAILED!\t FILE IS BUSY!')
         
 
     if len(updating_list)==0:
