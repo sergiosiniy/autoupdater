@@ -52,8 +52,8 @@ def update():
 
     for file in updating_list:
         try:
-            shutil.copy(dirpath_from_update+'\\'+file, \
-                        dirpath_to_update,follow_symlinks=True)
+            shutil.copy2(dirpath_from_update+'\\'+file, \
+                        dirpath_to_update,follow_symlinks=False)
             log_to_file.write_log(success,now.strftime("%Y-%m-%d %H:%M:%S ")+file+'\tis copied from:\t'+ \
                        dirpath_from_update+'\tto:\t'+dirpath_to_update)
             print(now.strftime("%Y-%m-%d %H:%M:%S ")+file+'\tis copied from:\t'+dirpath_from_update+ \
