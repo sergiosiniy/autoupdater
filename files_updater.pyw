@@ -1,4 +1,4 @@
-import glob, os, shutil, log_to_file, datetime
+import glob, os, shutil, log_to_file, datetime, time
 from os import path
 from tkinter import *
 from tkinter import messagebox
@@ -45,6 +45,7 @@ def callback(processName):
         run=True
         os.system('taskkill /im %s' % (processName))
         while run:
+            
             processes=os.popen('tasklist').read()
             if not processName in processes:
                 run=False
@@ -97,14 +98,12 @@ def update():
     
    
     for file in updating_list:
-        
         try:
-            if len(updating_list)==0:
-                print('All is up to date.')
-            else:
-                updateFile(dirpath_from_update,dirpath_to_update,file)
+            updateFile(dirpath_from_update,dirpath_to_update,file)
         except IOError:
             callback(file)
 
     if len(updating_list)==0:
-        print('All files is up to date')
+        print('All is up to date.')
+
+    
