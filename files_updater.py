@@ -42,9 +42,14 @@ def callback(processName):
     Tk().withdraw()
     if messagebox.askyesno('Предложение', 'Хотите обновить программу %s сейчас?\nПрограмма будет закрыта!'\
                            % (processName)):
+        run=True
         os.system('taskkill /im %s' % (processName))
+        while run:
+            processes=os.popen('tasklist').read()
+            if not processName in processes:
+                run=False
+                updateFile(dirpath_from_update,dirpath_to_update,processName)        
         
-        updateFile(dirpath_from_update,dirpath_to_update,processName)
     else:
         messagebox.showinfo('Программа %s' % (processName), \
                  'Программа не будет обновлена.\nНе забудьте обновить позже!')
