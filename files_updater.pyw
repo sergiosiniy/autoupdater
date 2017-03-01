@@ -1,7 +1,8 @@
-import glob, os, shutil, log_to_file, datetime, time
+import glob, os, shutil, log_to_file, datetime
 from os import path
 from tkinter import *
 from tkinter import messagebox
+from program_list import ProgramList
 
 #define variables
 now=datetime.datetime.now()
@@ -40,8 +41,11 @@ def updateFile(from_dir,to_dir, fileName):
 def callback(processName):
     #the askyesno function opens empty tk window, so we need explicitly call and close it
     Tk().withdraw()
-    if messagebox.askyesno('Предложение', 'Хотите обновить программу %s сейчас?\nПрограмма будет закрыта!'\
-                           % (processName)):
+    programlist = ProgramList()
+    programName = programlist.getProgramName(processName)
+    if messagebox.askyesno('Обновление \"%s\"' % (programName), \
+                           'Хотите обновить программу \"%s\" сейчас?\nПрограмма будет закрыта!'\
+                           % (programName)):
         run=True
         os.system('taskkill /im %s' % (processName))
         while run:
@@ -52,11 +56,11 @@ def callback(processName):
                 updateFile(dirpath_from_update,dirpath_to_update,processName)        
         
     else:
-        messagebox.showinfo('Программа %s' % (processName), \
+        messagebox.showinfo('Программа \"%s\"' % (programName), \
                  'Программа не будет обновлена.\nНе забудьте обновить позже!')
         log_to_file.write_log(error, \
                               now.strftime("%Y-%m-%d %H:%M:%S ")+\
-                              processName+'\t FAILED!\t FILE IS BUSY!')
+                              processName+'\t FAILED!\t FILE IS BUSY! USER DECLINED')
         print(now.strftime("%Y-%m-%d %H:%M:%S ")+\
               processName+'\t FAILED!\t FILE IS BUSY!')
 
@@ -83,7 +87,8 @@ def update():
 
     #compare and fill the files to update list
     for file in files_from_update:
-        
+
+        #if modifying time of file 1 is greather than file 2 - need update
         if (file in files_to_update) and \
            (path.getmtime(dirpath_from_update+'\\'\
             +file)>path.getmtime(dirpath_to_update+'\\'+file)):
