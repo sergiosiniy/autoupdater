@@ -47,14 +47,21 @@ def callback(processName):
                            'Хотите обновить программу \"%s\" сейчас?\nПрограмма будет закрыта!'\
                            % (programName)):
         run=True
+        count = 0
         os.system('taskkill /im %s' % (processName))
         while run:
-            
+            time.sleep(0.5)
             processes=os.popen('tasklist').read()
             if not processName in processes:
                 run=False
-                updateFile(dirpath_from_update,dirpath_to_update,processName)        
-        
+                updateFile(dirpath_from_update,dirpath_to_update,processName)
+
+            if count == 3:
+                os.system('taskkill /im %s' % (processName))
+                count = 0
+
+            count += 1
+            
     else:
         messagebox.showinfo('Программа \"%s\"' % (programName), \
                  'Программа не будет обновлена.\nНе забудьте обновить позже!')
