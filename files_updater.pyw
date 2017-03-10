@@ -13,7 +13,7 @@ error='error_log'
 cwd=os.getcwd()
 
 #get settings from file to copy from path1 to path2
-setings_file=open('setings.upd','r')
+setings_file=open('settings.upd','r')
 setings=setings_file.readlines()
 setings_file.close()
 
