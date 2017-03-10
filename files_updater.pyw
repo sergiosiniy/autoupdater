@@ -1,4 +1,4 @@
-import glob, os, shutil, log_to_file, datetime
+import glob, os, shutil, log_to_file, datetime, time
 from os import path
 from tkinter import *
 from tkinter import messagebox
