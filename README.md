@@ -2,7 +2,7 @@
 
 Used on Windows
 
-Use python 3.6
+Use python 3.4 and cx_Freeze to conver to exe compatible with Windows XP
 
 setings.upd (edit with notepad) is used to set path for update (from/to)
 
