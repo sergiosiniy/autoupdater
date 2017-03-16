@@ -61,7 +61,8 @@ def callback(processName):
                 count = 0
 
             count += 1
-            
+        messagebox.showinfo('Обновление \"%s\"' % (programName), \
+							'Программа \"%s\" успешно обновлена.\nМожно продолжать работу.' % (programName))    
     else:
         messagebox.showinfo('Программа \"%s\"' % (programName), \
                  'Программа не будет обновлена.\nНе забудьте обновить позже!')
