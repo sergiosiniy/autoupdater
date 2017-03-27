@@ -2,7 +2,7 @@ import sys, os
 from cx_Freeze import setup, Executable
 
 # Dependencies are automatically detected, but it might need fine tuning.
-build_exe_options = {"includes": ["tkinter","os","glob","time","shutil","datetime", "log_to_file", "program_list"],
+build_exe_options = {"includes": ["tkinter","os","glob","time","shutil","datetime", "log_to_file", "program_list", "threading"],
                      "include_files":['files_updater.pyw', 'log_to_file.py', \
                                       'program_list.py', 'settings.upd',\
                                       'tcl86t.dll','tcl86tg.dll','tk86t.dll',\
