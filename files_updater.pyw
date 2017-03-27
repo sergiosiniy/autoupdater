@@ -40,7 +40,10 @@ def updateFile(from_dir,to_dir, fileName):
 #call dialog box for user choise if he|she wants to update right now
 def callback(processName):
     #the askyesno function opens empty tk window, so we need explicitly call and close it
-    Tk().withdraw()
+    root=Tk()
+    root.attributes("-topmost", True)
+    root.withdraw()
+    
     programlist = ProgramList()
     programName = programlist.getProgramName(processName)
     if messagebox.askyesno('Обновление \"%s\"' % (programName), \
