@@ -6,8 +6,8 @@ build_exe_options = {"includes": ["tkinter","os","glob","time","shutil","datetim
                      "include_files":['files_updater.pyw', 'log_to_file.py', \
                                       'program_list.py', 'settings.upd',\
                                       'tcl86t.dll','tcl86tg.dll','tk86t.dll',\
-                                      'tk86tg.dll','msvcm90.dll','msvcp90.dll','msvcr90.dll', \
-									  'msvcr100.dll']}
+                                      'tk86tg.dll','msvcm90.dll','msvcp90.dll',\
+                                      'msvcr90.dll', 'msvcr100.dll', 'self_update.py']}
 
 os.environ['TCL_LIBRARY'] = "D:\\Python3.4\\Lang\\tcl\\tcl8.6"
 os.environ['TK_LIBRARY'] = "D:\\Python3.4\\Lang\\tcl\\tk8.6"
