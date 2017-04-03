@@ -32,7 +32,7 @@ class programs_updater():
                 self.dirpath_from_update=setting[setting.index('=')+1:]
 
         self.message_error_log = '\t FAILED!\t FILE IS BUSY! USER DECLINED'
-        self.message_success_log = '\tis copied from:\t'+\self.dirpath_from_update+\
+        self.message_success_log = '\tis copied from:\t'+self.dirpath_from_update+\
                                    '\tto:\t'+self.dirpath_to_update
 
     #update file function
@@ -43,7 +43,7 @@ class programs_updater():
         #write to success log
         #log_to_file.write_log(self.success,self.now.strftime("%Y-%m-%d %H:%M:%S ")+fileName+'\tis copied from:\t'+\
         #                      from_dir+'\tto:\t'+to_dir)
-        write_log(self.success, fileName, message_success_log)
+        self.write_log(self.success, fileName, self.message_success_log)
         #print info to console(for debug)
         print(self.now.strftime("%Y-%m-%d %H:%M:%S ")+fileName+'\tis copied from:\t'+\
               from_dir+'\tto:\t'+to_dir)
@@ -86,13 +86,13 @@ class programs_updater():
             #                      self.now.strftime("%Y-%m-%d %H:%M:%S ")+\
             #                      process_name+'\t FAILED!\t FILE IS BUSY! USER DECLINED')
             #write to log
-            self.write_log(self.error, process_name, message_error_log)
+            self.write_log(self.error, process_name, self.message_error_log)
             #print to console (used for debug)
             print(self.now.strftime("%Y-%m-%d %H:%M:%S ")+\
                   process_name+'\t FAILED!\t FILE IS BUSY!')
 
     #write message to the log
-    def write_log(self,file_name,log_type,message):
+    def write_log(self,log_type,file_name,message):
         log_to_file.write_log(log_type, \
                                   self.now.strftime("%Y-%m-%d %H:%M:%S ")+\
                                   file_name+message)
