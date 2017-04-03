@@ -1,2 +1,10 @@
+#define path where files must be updated
 dirpath_to_update=C:\FARMACO
+#define path from to take and check updates for files
 dirpath_from_update=\\192.168.1.1\!new!\refresh
+#define which file extensions should be watched for updates
+#files_update_ext=*.exe;*.fr3
+#define path from to take and check updates for program modules itself
+modules_update_path=D:\test1
+#define which file extensions should be watched for updates in modules path
+modules_update_ext=*.py;*.pyw;*.upd
