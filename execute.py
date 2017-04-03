@@ -1,7 +1,9 @@
-import files_updater
+from files_updater import programs_updater
 
 
-files_updater.update()
+updater = programs_updater()
+
+updater.update()
 
 
 
