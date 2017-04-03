@@ -4,122 +4,142 @@ from tkinter import *
 from tkinter import messagebox
 from program_list import ProgramList
 
-#define variables
-now=datetime.datetime.now()
-success='success_log'
-error='error_log'
+class programs_updater():
 
-#current directory variable to create log files later
-cwd=os.getcwd()
 
-#get settings from file to copy from path1 to path2
-setings_file=open('settings.upd','r')
-setings=setings_file.readlines()
-setings_file.close()
+    def __init__(self):
+        #define variables
+        self.now=datetime.datetime.now()
+        self.success='success_log'
+        self.error='error_log'
+       
 
-#initialize path variables with data from settings file
-for line in setings:
-    seting=line.rstrip('\n').split('=')
+        #current directory variable to create log files later
+        self.cwd=os.getcwd()
 
-    if seting[0]=='dirpath_to_update':
-        dirpath_to_update=seting[1]
-    elif seting[0]=='dirpath_from_update':
-        dirpath_from_update=seting[1]
+        #get settings from file to copy from path1 to path2
+        settings_file=open('settings.upd','r')
+        settings=settings_file.readlines()
+        settings_file.close()
 
-#update file function
-def updateFile(from_dir,to_dir, fileName):
-    #copy file with seving metadata
-    shutil.copy2(dirpath_from_update+'\\'+fileName,dirpath_to_update,follow_symlinks=False)
-    #write to success log
-    log_to_file.write_log(success,now.strftime("%Y-%m-%d %H:%M:%S ")+fileName+'\tis copied from:\t'+\
-                          dirpath_from_update+'\tto:\t'+dirpath_to_update)
-    #print info to console
-    print(now.strftime("%Y-%m-%d %H:%M:%S ")+fileName+'\tis copied from:\t'+\
-          dirpath_from_update+'\tto:\t'+dirpath_to_update)
+        #initialize path variables with data from settings file
+        for line in settings:
+            setting=line.rstrip('\n')
+            if 'dirpath_to_update' in line:
+                self.dirpath_to_update=setting[setting.index('=')+1:]
+       
+            elif 'dirpath_from_update' in line:
+                self.dirpath_from_update=setting[setting.index('=')+1:]
 
-#call dialog box for user choise if he|she wants to update right now
-def callback(processName):
-    #the askyesno function opens empty tk window, so we need explicitly call and close it
-    root=Tk()
-    root.attributes("-topmost", True)
-    root.withdraw()
-    
-    programlist = ProgramList()
-    programName = programlist.getProgramName(processName)
-    if messagebox.askyesno('Обновление \"%s\"' % (programName), \
-                           'Хотите обновить программу \"%s\" сейчас?\nПрограмма будет закрыта!'\
-                           % (programName)):
-        run=True
-        count = 0
-        os.system('taskkill /im %s' % (processName))
-        while run:
-            time.sleep(0.5)
-            processes=os.popen('tasklist').read()
-            if not processName in processes:
-                run=False
-                updateFile(dirpath_from_update,dirpath_to_update,processName)
+        self.message_error_log = '\t FAILED!\t FILE IS BUSY! USER DECLINED'
+        self.message_success_log = '\tis copied from:\t'+\self.dirpath_from_update+\
+                                   '\tto:\t'+self.dirpath_to_update
 
-            if count == 3:
-                os.system('taskkill /im %s' % (processName))
-                count = 0
+    #update file function
+    def updateFile(self, from_dir,to_dir, fileName):
+        #copy file with seving metadata
+        shutil.copy2(from_dir+'\\'+fileName,to_dir,follow_symlinks=False)
+        
+        #write to success log
+        #log_to_file.write_log(self.success,self.now.strftime("%Y-%m-%d %H:%M:%S ")+fileName+'\tis copied from:\t'+\
+        #                      from_dir+'\tto:\t'+to_dir)
+        write_log(self.success, fileName, message_success_log)
+        #print info to console(for debug)
+        print(self.now.strftime("%Y-%m-%d %H:%M:%S ")+fileName+'\tis copied from:\t'+\
+              from_dir+'\tto:\t'+to_dir)
 
-            count += 1
-        messagebox.showinfo('Обновление \"%s\"' % (programName), \
-							'Программа \"%s\" успешно обновлена.\nМожно продолжать работу.' % (programName))    
-    else:
-        messagebox.showinfo('Программа \"%s\"' % (programName), \
-                 'Программа не будет обновлена.\nНе забудьте обновить позже!')
-        log_to_file.write_log(error, \
-                              now.strftime("%Y-%m-%d %H:%M:%S ")+\
-                              processName+'\t FAILED!\t FILE IS BUSY! USER DECLINED')
-        print(now.strftime("%Y-%m-%d %H:%M:%S ")+\
-              processName+'\t FAILED!\t FILE IS BUSY!')
 
-#main method which runs a script
-#creates list of files to update
-def update():
+    #call dialog box for user choise if he|she wants to update right now
+    def callback(self, process_name):
+        #the askyesno function opens empty tk window, so we need explicitly call and close it
+        root=Tk()
+        root.attributes("-topmost", True)
+        root.withdraw()
+        
+        program_list = ProgramList()
+        program_name = program_list.getProgramName(process_name)
+        if messagebox.askyesno('Обновление \"%s\"' % (program_name), \
+                               'Хотите обновить программу \"%s\" сейчас?\nПрограмма будет закрыта!'\
+                               % (program_name)):
+            run=True
+            count = 0
+            os.system('taskkill /im %s' % (process_name))
+            while run:
+                time.sleep(0.5)
+                processes=os.popen('tasklist').read()
+                if not process_name in processes:
+                    run=False
+                    self.updateFile(self.dirpath_from_update,self.dirpath_to_update,process_name)
 
-    #create two lists to compare files in path1 and path2
-    
+                if count == 3:
+                    os.system('taskkill /im %s' % (process_name))
+                    count = 0
 
-    files_to_update=[]
-    files_from_update=[]
-    updating_list=[]
+                count += 1
+            messagebox.showinfo('Обновление \"%s\"' % (program_name), \
+                                'Программа \"%s\" успешно обновлена.\nМожно продолжать работу.'\
+                                % (program_name))    
+        else:
+            messagebox.showinfo('Программа \"%s\"' % (program_name), \
+                     'Программа не будет обновлена.\nНе забудьте обновить позже!')
+            #log_to_file.write_log(self.error, \
+            #                      self.now.strftime("%Y-%m-%d %H:%M:%S ")+\
+            #                      process_name+'\t FAILED!\t FILE IS BUSY! USER DECLINED')
+            #write to log
+            self.write_log(self.error, process_name, message_error_log)
+            #print to console (used for debug)
+            print(self.now.strftime("%Y-%m-%d %H:%M:%S ")+\
+                  process_name+'\t FAILED!\t FILE IS BUSY!')
 
-    os.chdir(dirpath_to_update)
-    
-    for file in glob.glob('*.exe'):
-        files_to_update.append(file)
+    #write message to the log
+    def write_log(self,file_name,log_type,message):
+        log_to_file.write_log(log_type, \
+                                  self.now.strftime("%Y-%m-%d %H:%M:%S ")+\
+                                  file_name+message)
 
-    os.chdir(dirpath_from_update)
+        
+    #main method which runs a script
+    #creates list of files to update
+    def update(self):
 
-    for file in glob.glob('*.exe'):
-        files_from_update.append(file)
+        #create two lists to compare files in path1 and path2
+        files_to_update=[]
+        files_from_update=[]
+        updating_list=[]
 
-    #compare and fill the files to update list
-    for file in files_from_update:
+        os.chdir(self.dirpath_to_update)
+        
+        for file in glob.glob('*.exe'):
+            files_to_update.append(file)
 
-        #if modifying time of file 1 is greather than file 2 - need update
-        if (file in files_to_update) and \
-           (path.getmtime(dirpath_from_update+'\\'\
-            +file)>path.getmtime(dirpath_to_update+'\\'+file)):
-            updating_list.append(file)
-            
-        elif not file in files_to_update:
-            updating_list.append(file)
+        os.chdir(self.dirpath_from_update)
 
-    #ch dir for writing logs into
-    os.chdir(cwd)
+        for file in glob.glob('*.exe'):
+            files_from_update.append(file)
 
-    
-   
-    for file in updating_list:
-        try:
-            updateFile(dirpath_from_update,dirpath_to_update,file)
-        except IOError:
-            callback(file)
+        #compare and fill the files to update list
+        for file in files_from_update:
 
-    if len(updating_list)==0:
-        print('All is up to date.')
+            #if modifying time of file 1 is greather than file 2 - need update
+            if (file in files_to_update) and \
+               (path.getmtime(self.dirpath_from_update+'\\'\
+                +file)>path.getmtime(self.dirpath_to_update+'\\'+file)):
+                updating_list.append(file)
+                
+            elif not file in files_to_update:
+                updating_list.append(file)
 
-    
+        #ch dir for writing logs into
+        os.chdir(self.cwd)  
+       
+        for file in updating_list:
+            try:
+                self.updateFile(self.dirpath_from_update,self.dirpath_to_update,file)
+            except IOError:
+                self.callback(file)
+                continue
+
+        if len(updating_list)==0:
+            print('All is up to date.')
+
+        
