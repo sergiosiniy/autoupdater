@@ -13,27 +13,32 @@ class programs_updater():
         self.success = 'success'
         self.error = 'error'
        
-
         #current directory variable to create log files later
         self.cwd = os.getcwd()
 
         #get settings from file to copy from path1 to path2
-        settings_file = open('settings.upd', 'r')
-        settings = settings_file.readlines()
-        settings_file.close()
-
+        with open('settings.upd', 'r') as settings_file:
+            settings = settings_file.readlines()
+     
         #initialize path variables with data from settings file
         for line in settings:
             setting = line.rstrip('\n')
+            if '#' in line:
+                continue
+            
             if 'dirpath_to_update' in line:
                 self.dirpath_to_update = setting[setting.index('=') + 1:]
        
             elif 'dirpath_from_update' in line:
                 self.dirpath_from_update = setting[setting.index('=') + 1:]
 
+            elif 'files_update_ext' in line:
+                self.update_ext = setting[setting.index('=') + 1:].split(';')
+
         self.message_error_log = '\t FAILED!\t FILE IS BUSY! USER DECLINED'
         self.message_success_log = '\tis copied from:\t' + self.dirpath_from_update + \
                                    '\tto:\t' + self.dirpath_to_update
+
 
     #update file function
     def updateFile(self, from_dir, to_dir, fileName):
@@ -108,13 +113,15 @@ class programs_updater():
     
         os.chdir(self.dirpath_to_update)
         
-        for file in glob.glob('*.exe'):
-            files_to_update.append(file)
+        for ext in self.update_ext:
+            for file in glob.glob(ext):
+                files_to_update.append(file)
 
         os.chdir(self.dirpath_from_update)
-
-        for file in glob.glob('*.exe'):
-            files_from_update.append(file)
+        
+        for ext in self.update_ext:
+            for file in glob.glob(ext):
+                files_from_update.append(file)
 
         #compare and fill the files to update list
         for file in files_from_update:
