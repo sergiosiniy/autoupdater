@@ -1,11 +1,11 @@
 def write_log(logname,string):
+    """Creates log dile and appends log entries to it.
 
-    if logname == 'error_log':
-        with open('error_log.log','a') as log:
-            log.write(string+'\n')
-           
-    elif logname == 'success_log':        
-        with open('success_log.log','a') as log:
-            log.write(string+'\n')
+        Args:
+            logname: Is used as name of log file to create or append.
             
+    """
+
+    with open(logname + '.log','a') as log:
+            log.write(string+'\n')            
 
