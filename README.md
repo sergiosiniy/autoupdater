@@ -1,6 +1,6 @@
 # autoupdater
 
-Used on Windows
+Used on Windows XP
 
 Use python 3.4 and cx_Freeze to conver to exe compatible with Windows XP
 
