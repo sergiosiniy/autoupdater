@@ -1,5 +1,6 @@
 class ProgramList:
-
+    """Dictionary contains program names and file names relations"""
+    
     #program names dictionary
     programs = {'farmaco.exe':'Торговый отдел', \
                 'doc_dlvr.exe':'Маршрутный лист', \
@@ -38,8 +39,13 @@ class ProgramList:
 
     #returns program name from dictionary or file
     #name if there is no such program    
-    def getProgramName(self,programName):
-        if programName in self.programs:
-            return self.programs[programName]
+    def getProgramName(self,program_name):
+        """Returns humanreadable program name.
+
+            Args:
+            program_name -- Name of executable program file.
+        """
+        if program_name in self.programs.keys():
+            return self.programs[program_name]
         else:
-            return programName
+            return program_name

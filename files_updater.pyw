@@ -5,9 +5,7 @@ from tkinter import messagebox
 from program_list import ProgramList
 
 class programs_updater():
-
-    """Class is used to maintain updating operations and logging it results.
-    """
+    """Class is used to maintain updating operations and logging it results."""
 
 
     def __init__(self):
@@ -45,13 +43,12 @@ class programs_updater():
 
     #update file function
     def updateFile(self, from_dir, to_dir, fileName):
-
         """Copies the file, saving metadata and timestamps.
 
             Args:
-                from_dir: Path from updates will be copied.
-                to_dir: Path to updates will be copied.
-                fileName: Name of file which will be copied.
+            from_dir -- Path from updates will be copied.
+            to_dir -- Path to updates will be copied.
+            fileName -- Name of file which will be copied.
         """
 
         #copy file with seving metadata
@@ -67,15 +64,15 @@ class programs_updater():
 
     #call dialog box for user choise if he|she wants to update right now
     def callback(self, process_name):
-
         """Creates the prompt dialog for user to decide if one wants to update
             the app which is running now. Closes running process to update file.
 
             Args:
-                process_name: Must be a str. Name of currently running process.
-                                Used to display userfriendly program name in prompt.
+            process_name -- Must be a str. Name of currently running process.
+                            Used to display userfriendly program name in prompt.
                 
         """
+        
         #the askyesno function opens empty tk window, so we need explicitly call and close it
         root = Tk()
         root.attributes("-topmost", True)
@@ -118,14 +115,14 @@ class programs_updater():
 
     #write message to the log
     def write_log(self,log_type,file_name,message):
-
         """Writes log to a file.
 
             Args:
-                log_type: Used as name of log file.
-                file_name: Name of file, which was (or not) updated to write it to the log.
-                message: Message which will be written to the log (e.g. "successfully updated")
+            log_type -- Used as name of log file.
+            file_name -- Name of file, which was (or not) updated to write it to the log.
+            message -- Message which will be written to the log (e.g. "successfully updated")
         """
+        
         log_to_file.write_log(log_type, self.now.strftime("%Y-%m-%d %H:%M:%S ") + \
                                   file_name + message)
     
@@ -133,12 +130,12 @@ class programs_updater():
     #main method which runs a script
     #creates list of files to update
     def update(self):
-
         """Gathers all files with certain extentions from the pathes from update and to update.
             Checks if file need to be updated and if there are all files are in working direcroty.
             Tries to update all files. Calls a prompt dialog if file needs to be updated but is
             busy now.
         """
+        
         #create two lists to compare files in path1 and path2
         files_to_update = []
         files_from_update = []
