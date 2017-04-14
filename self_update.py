@@ -28,22 +28,27 @@ class self_update():
 
 
     def update_modules(self):
+        """Checks if self program modules need to be updated and updates it if needed."""
+
         if len(self.modules_update_path) > 0:
             update_from = []
             update_to = []
             update_list = []
 
+            #for each extention from settings add file name to the list
             for file_ext in self.modules_ext:
                 for file in glob.glob(file_ext):
                     update_to.append(file)
 
+            #change dir to the path from which modules will be updated
             os.chdir(self.modules_update_path)
 
+            #for each extention from settings add file name to the list
             for file_ext in self.modules_ext:
                 for file in glob.glob(file_ext):
                     update_from.append(file)
 
-            #compare and fill the files to update list
+            #compare files and fill update list
             for file in update_from:
 
                 #if modifying time of file 1 is greather than file 2 - need update
@@ -51,9 +56,11 @@ class self_update():
                    (os.path.getmtime(self.modules_update_path + '\\'\
                     +file) > os.path.getmtime(self.cwd + '\\' + file)):
                     update_list.append(file)
-                    
+
+                #if file doesn't exists in target path add - need update
                 elif not file in update_to:
                     update_list.append(file)
+
             
             if len(update_list) < 1:
                 os.chdir(self.cwd)
@@ -75,10 +82,18 @@ class self_update():
 
             
     #update modules
-    def updateFile(self, from_dir,to_dir, fileName):
+    def updateFile(self, from_dir,to_dir, file_name):
+        """Tries to update file in the target directory.
+
+            Args:
+            from_dir -- Path from updates.
+            to_dir -- Target directory for updates.
+            file_name -- Name of file which will be updated.
+        """
+        
         #copy file with seving metadata
-        shutil.copy2(from_dir + '\\' + fileName, to_dir,follow_symlinks = False)
-        self.write_log(self.success, fileName, " successfully updated!")
+        shutil.copy2(from_dir + '\\' + file_name, to_dir,follow_symlinks = False)
+        self.write_log(self.success, file_name, " successfully updated!")
 
      #write message to the log
     def write_log(self,log_type, file_name,message):
