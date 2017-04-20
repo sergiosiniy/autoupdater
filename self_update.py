@@ -53,8 +53,7 @@ class self_update():
 
                 #if modifying time of file 1 is greather than file 2 - need update
                 if (file in update_to) and \
-                   (os.path.getmtime(self.modules_update_path + '\\'\
-                    +file) > os.path.getmtime(self.cwd + '\\' + file)):
+                   (os.path.getmtime(os.path.join(self.modules_update_path, file)) > os.path.getmtime(os.path.join(self.cwd, file))):
                     update_list.append(file)
 
                 #if file doesn't exists in target path add - need update
@@ -92,7 +91,7 @@ class self_update():
         """
         
         #copy file with seving metadata
-        shutil.copy2(from_dir + '\\' + file_name, to_dir,follow_symlinks = False)
+        shutil.copy2(os.path.join(from_dir, file_name), to_dir,follow_symlinks = False)
         self.write_log(self.success, file_name, " successfully updated!")
 
      #write message to the log
