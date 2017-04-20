@@ -52,7 +52,7 @@ class programs_updater():
         """
 
         #copy file with seving metadata
-        shutil.copy2(from_dir + '\\' + fileName, to_dir, follow_symlinks = False)
+        shutil.copy2(path.join(from_dir, fileName), to_dir, follow_symlinks = False)
 
         #write success log
         self.write_log(self.success, fileName, self.message_success_log)
@@ -158,8 +158,7 @@ class programs_updater():
 
             #if modifying time of file 1 is greather than file 2 - need update
             if (file in files_to_update) and \
-               (path.getmtime(self.dirpath_from_update + '\\' \
-                + file) > path.getmtime(self.dirpath_to_update + '\\' + file)):
+               (path.getmtime(path.join(self.dirpath_from_update, file)) > path.getmtime(path.join(self.dirpath_to_update, file))):
                 updating_list.append(file)
                 
             elif not file in files_to_update:
