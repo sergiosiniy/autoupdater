@@ -13,6 +13,7 @@ class programs_updater():
         self.now = datetime.datetime.now()
         self.success = 'success'
         self.error = 'error'
+        self.fail_message = False
        
         #current directory variable to create log files later
         self.cwd = os.getcwd()
@@ -35,6 +36,19 @@ class programs_updater():
 
             elif 'files_update_ext' in line:
                 self.update_ext = setting[setting.index('=') + 1:].split(';')
+                
+            elif 'network_path' in line:
+                self.network_path = setting[setting.index('=') + 1:]
+
+            elif 'user' in line:
+                self.user = setting[setting.index('=') + 1:]
+
+            elif 'password' in line:
+                self.password = setting[setting.index('=') + 1:]
+
+            elif 'fail_message' in line and 'True' in line:
+                self.fail_message = True
+                
 
         self.message_error_log = '\t FAILED!\t FILE IS BUSY! USER DECLINED'
         self.message_success_log = '\tis copied from:\t' + self.dirpath_from_update + \
@@ -176,5 +190,37 @@ class programs_updater():
 
         if len(updating_list) == 0:
             print('All is up to date.')
+
+
+    #checks network path for availability    
+    def check_disk(self):
+        """Checks if the disk with updates is available. Tries to connect if not."""
+        
+        disk_add = r"net use Z: " + self.network_path + " /persistent:yes"
+        disk_add_with_user = r"net use Z: " + self.network_path + " /user:" + self.user + " " + self.password + " /persistent:yes"
+
+        #for case if another user acc is used for connection
+        if not os.path.exists(self.dirpath_from_update):
+            os.system(disk_add)
+        else:
+            return True
+        
+        #for case if there is no user acc is used for connection
+        if not os.path.exists(self.dirpath_from_update):
+            os.system(disk_add_with_user)
+        else:
+            return True
+        
+        #if can't connect path
+        if not os.path.exists(self.dirpath_from_update) and self.fail_message:
+            root = Tk()
+            root.attributes("-topmost", True)
+            root.withdraw()
+            messagebox.showinfo('Проверка доступа по сети', \
+                                'Не получилось подключиться к сетевому диску.\n' + \
+                                'Обновление программ невозможно!\n' + \
+                                'Проверьте соединение с Киевом!')
+            return False
+
 
         

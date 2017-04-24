@@ -1,4 +1,4 @@
-import glob, os, shutil, log_to_file, datetime
+import glob, os, shutil, log_to_file, datetime, subprocess
 
 class self_update():
     
@@ -26,6 +26,7 @@ class self_update():
                 elif 'modules_update_ext' in line:
                     self.modules_ext = setting[setting.index('=')+1:].split(';')
 
+        
 
     def update_modules(self):
         """Checks if self program modules need to be updated and updates it if needed."""
