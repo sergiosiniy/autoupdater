@@ -196,8 +196,8 @@ class programs_updater():
     def check_disk(self):
         """Checks if the disk with updates is available. Tries to connect if not."""
         
-        disk_add = r"net use Z: " + self.network_path + " /persistent:yes"
-        disk_add_with_user = r"net use Z: " + self.network_path + " /user:" + self.user + " " + self.password + " /persistent:yes"
+        disk_add = r"net use " + self.dirpath_from_update[:2] + " " + self.network_path + " /persistent:yes"
+        disk_add_with_user = r"net use " + self.dirpath_from_update[:2] + " " + self.network_path + " /user:" + self.user + " " + self.password + " /persistent:yes"
 
         #for case if another user acc is used for connection
         if not os.path.exists(self.dirpath_from_update):
