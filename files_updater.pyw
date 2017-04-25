@@ -220,6 +220,10 @@ class programs_updater():
                                 'Не получилось подключиться к сетевому диску.\n' + \
                                 'Обновление программ невозможно!\n' + \
                                 'Проверьте соединение с Киевом!')
+            self.write_log(self.error, "Can't connect to the share: ", self.dirpath_from_update)
+            return False
+        else:
+            self.write_log(self.error, "Can't connect to the share: ", self.dirpath_from_update)
             return False
 
 
