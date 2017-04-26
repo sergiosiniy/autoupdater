@@ -198,16 +198,17 @@ class programs_updater():
         
         disk_add = r"net use " + self.dirpath_from_update[:2] + " " + self.network_path + " /persistent:yes"
         disk_add_with_user = r"net use " + self.dirpath_from_update[:2] + " " + self.network_path + " /user:" + self.user + " " + self.password + " /persistent:yes"
+        #disk_remove = r"net use " + self.dirpath_from_update[:2] + " /delete"
 
-        #for case if another user acc is used for connection
-        if not os.path.exists(self.dirpath_from_update):
-            os.system(disk_add)
-        else:
-            return True
-        
         #for case if there is no user acc is used for connection
         if not os.path.exists(self.dirpath_from_update):
             os.system(disk_add_with_user)
+        else:
+            return True
+        
+        #for case if another user acc is used for connection
+        if not os.path.exists(self.dirpath_from_update):
+            os.system(disk_add)
         else:
             return True
         
