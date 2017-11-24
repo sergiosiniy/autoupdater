@@ -1,6 +1,6 @@
 # autoupdater
 
-Used on Windows 7 and higher.
+Used on Windows 7 and higher. Application (script) checks if network drive is available. Tries to connect it if not. Returns dialog message to user if cant connect drive. Running in scheduler. Checks for updates in specified path. Campares two files (directory on user's PC and network drive path, where updates are stored) by date and time. If file in updates path is newer or there is no such file on user's PC - script will copy file to PC. Currently is used on my job for autodeploying new apps, that programmer writes for company. Works on Windows XP and later (different DLLs are needed)
 
 Use python 3.6++ and cx_Freeze to convert to exe
 
