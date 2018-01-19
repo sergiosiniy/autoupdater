@@ -99,7 +99,11 @@ class programs_updater():
                                % (program_name)):
             run = True
             count = 0
-            os.system('taskkill /im %s' % (process_name))
+            #update for CertPrinter
+            if process_name == 'CertPrinter.exe':
+                os.system('taskkill /f /im DOCWATCH.exe')
+                time.sleep(0.5)
+            os.system('taskkill /f /im %s' % (process_name))
             while run:
                 time.sleep(0.5)
                 processes = os.popen('tasklist').read()
@@ -108,7 +112,7 @@ class programs_updater():
                     self.updateFile(self.dirpath_from_update, self.dirpath_to_update, process_name)
 
                 if count == 3:
-                    os.system('taskkill /im %s' % (process_name))
+                    os.system('taskkill /f /im %s' % (process_name))
                     count = 0
 
                 count += 1
